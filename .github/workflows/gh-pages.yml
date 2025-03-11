@@ -33,6 +33,10 @@ jobs:
           path: ./.cache
           key: ${{ runner.os }}-eleventy-fetch-cache
 
+      - name: Copy CNAME if it exists
+        run: |
+          if [ -f CNAME ]; then cp CNAME _site; fi
+
       - run: npm install
       - run: npm run build-ghpages
 
