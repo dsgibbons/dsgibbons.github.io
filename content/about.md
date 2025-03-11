@@ -7,4 +7,5 @@ const eleventyNavigation = {
 
 # About
 
-I am a person that writes about stuff.
+I'm a software developer living in Adelaide, Australia. I don't like writing
+about myself.
