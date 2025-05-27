@@ -3,8 +3,8 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>This is my third post.</title>
-		<meta name="description" content="This is a post on My Blog about win-win survival strategies.">
+		<title>Rust tips #1: Custom target directory for rust-analyzer</title>
+		<meta name="description" content="How to speed up builds when using `rust-analyzer` by specifying a custom target directory">
 		<link rel="alternate" href="/feed/feed.xml" type="application/atom+xml" title="dsgibbons">
 		
 		<style>/**
@@ -506,51 +506,44 @@ header {
 		<main id="skip">
 			<heading-anchors>
 				
-<h1 id="this-is-my-third-post">This is my third post.</h1>
+<h1 id="rust-tips-1-custom-target-directory-for-rust-analyzer">Rust tips #1: Custom target directory for rust-analyzer</h1>
 
 <ul class="post-metadata">
-	<li><time datetime="2018-08-24">24 August 2018</time></li>
-	<li><a href="/tags/second-tag/" class="post-tag">second tag</a>, </li>
-	<li><a href="/tags/posts-with-two-tags/" class="post-tag">posts with two tags</a></li>
+	<li><time datetime="2025-05-28">28 May 2025</time></li>
+	<li><a href="/tags/rust/" class="post-tag">rust</a>, </li>
+	<li><a href="/tags/rust-analyzer/" class="post-tag">rust-analyzer</a>, </li>
+	<li><a href="/tags/helix/" class="post-tag">helix</a>, </li>
+	<li><a href="/tags/tip/" class="post-tag">tip</a></li>
 </ul>
 
-<p>Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition. Organically grow the holistic world view of disruptive innovation via workplace diversity and empowerment.</p>
-<h2 id="code">Code</h2>
-<h3 id="this-is-a-very-long-heading-that-i-want-to-wrap-this-is-a-very-long-heading-that-i-want-to-wrap-this-is-a-very-long-heading-that-i-want-to-wrap-this-is-a-very-long-heading-that-i-want-to-wrap">This is a very long heading that I want to wrap This is a very long heading that I want to wrap This is a very long heading that I want to wrap This is a very long heading that I want to wrap</h3>
-<p>Bring to the table win-win survival strategies to ensure proactive domination. At the end of the day, going forward, a new normal that has evolved from generation X is on the runway heading towards a streamlined cloud solution. User generated content in real-time will have multiple touchpoints for offshoring.</p>
-<pre class="language-js" tabindex="0"><code class="language-js"><span class="token comment">// this is a command</span>
-<span class="token keyword">function</span> <span class="token function">myCommand</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-	<span class="token keyword">let</span> counter <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
-	counter<span class="token operator">++</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
+<p>Recently, while working on
+<a href="https://github.com/lancedb/lance/pull/3572">lancedb/lance#3572</a>, I noticed that
+builds were taking much longer than usual. Simply changing a single character in
+one of the unit tests required 100+ crates to be recompiled when running
+<code>cargo test</code>. While waiting for tests to compile, the following message would
+appear:</p>
+<pre class="language-txt" tabindex="0"><code class="language-txt">Blocking waiting for file lock on build directory.</code></pre>
+<p>The culprit behind this message is
+<a href="https://rust-analyzer.github.io/"><code>rust-analyzer</code></a>, which I run as an LSP in
+<a href="https://helix-editor.com/">Helix</a>. <code>rust-analyzer</code> compiles with different
+settings to <code>cargo test</code>, but they both build to the same target directory.
+Fortunately, we can easily direct <code>rust-analyzer</code> to build to a different target
+directory by editing <code>~/.config/helix/languages.toml</code>:</p>
+<pre class="language-toml" tabindex="0"><code class="language-toml"><span class="token punctuation">[</span><span class="token table class-name">language-server.rust-analyzer.environment</span><span class="token punctuation">]</span>
+<span class="token key property">CARGO_TARGET_DIR</span> <span class="token punctuation">=</span> <span class="token string">"target/analyzer"</span></code></pre>
+<p>See the
+<a href="https://rust-analyzer.github.io/book/configuration.html#cargo.targetDir">rust-analyzer docs</a>
+for more information.</p>
 
-<span class="token comment">// Test with a line break above this line.</span>
-console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'Test'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
-<h3 id="heading-with-a-link">Heading with a <a href="#code">link</a></h3>
-<p>Bring to the table win-win survival strategies to ensure proactive domination. At the end of the day, going forward, a new normal that has evolved from generation X is on the runway heading towards a streamlined cloud solution. User generated content in real-time will have multiple touchpoints for offshoring.</p>
-<pre><code>// this is a command
-function myCommand() {
-	let counter = 0;
-	counter++;
-}
-
-// Test with a line break above this line.
-console.log('Test');
-</code></pre>
-<h2 id="section-header">Section Header</h2>
-<p>Capitalize on low hanging fruit to identify a ballpark value added activity to beta test. Override the digital divide with additional clickthroughs from DevOps. Nanotechnology immersion along the information highway will close the loop on focusing solely on the bottom line.</p>
-
-<ul class="links-nextprev"><li class="links-nextprev-prev">← Previous<br> <a href="/blog/secondpost/">This is my second post with a much longer title.</a></li><li class="links-nextprev-next">Next →<br><a href="/blog/fourthpost/">This is my fourth post</a></li>
-</ul>
 
 			</heading-anchors>
 		</main>
 
 		<footer>
-			<p><em>Built with <a href="https://www.11ty.dev/">Eleventy v3.0.0</a></em></p>
+			<p><em>Built with <a href="https://www.11ty.dev/">Eleventy v3.1.0</a></em></p>
 		</footer>
 
-		<!-- This page `/blog/thirdpost/` was built on 2025-03-11T21:46:47.861Z -->
+		<!-- This page `/blog/rust-analyzer-helix/` was built on 2025-05-27T21:44:27.644Z -->
 		<script type="module" src="/dist/xbxy_EL6cU.js"></script>
 	</body>
 </html>
